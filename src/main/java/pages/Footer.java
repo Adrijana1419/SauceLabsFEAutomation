@@ -15,17 +15,14 @@ public class Footer {
     WebDriverWait wait;
 
 
-
     public Footer(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
     }
 
 
     public String verifyFooterRedirection(By linkLocator) {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
         WebElement link = driver.findElement(linkLocator);
         link.click();
 
@@ -36,15 +33,12 @@ public class Footer {
                 break;
             }
         }
-
         String redirectedUrl = driver.getCurrentUrl();
-
         driver.close();
         driver.switchTo().window(originalWindow);
 
         return redirectedUrl;
     }
-
 }
 
 

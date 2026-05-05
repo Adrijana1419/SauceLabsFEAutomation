@@ -17,31 +17,17 @@ public class Header {
     Actions actions;
     WebDriverWait wait;
 
-
-    private By yourCartButton = By.className("shopping_cart_link");
-
     private By burgerMenuButton = By.id("react-burger-menu-btn");
-    private By burgerMenu = By.className("bm-menu-wrap");
     private By allItemsLink = By.id("inventory_sidebar_link");
-
     private By aboutLink = By.id("about_sidebar_link");
     private By logoutLink = By.id("logout_sidebar_link");
     private By resetAppStateLink = By.id("reset_sidebar_link");
-
 
     public Header(WebDriver driver) {
 
         this.driver = driver;
         this.actions = new Actions(driver);
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-
-    }
-
-    public String redirectingToYourCartPage() {
-
-        driver.findElement(yourCartButton).click();
-        return driver.getCurrentUrl();
     }
 
     public String getAboutLinkHref() {
@@ -67,23 +53,22 @@ public class Header {
         return driver.getCurrentUrl();
     }
 
-
     public void resetAppState() {
-            WebElement menuButton =
-                    wait.until(ExpectedConditions.elementToBeClickable(burgerMenuButton));
-            menuButton.click();
+        WebElement menuButton =
+                wait.until(ExpectedConditions.elementToBeClickable(burgerMenuButton));
+        menuButton.click();
 
-            WebElement resetLink =
-                    wait.until(ExpectedConditions.presenceOfElementLocated(resetAppStateLink));
+        WebElement resetLink =
+                wait.until(ExpectedConditions.presenceOfElementLocated(resetAppStateLink));
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", resetLink);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", resetLink);
 
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+    }
 
     public void clickLogout() {
         WebElement menuButton =

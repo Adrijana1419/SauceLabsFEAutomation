@@ -15,28 +15,24 @@ public class CheckoutCompletePage {
     private By BackHomeButton = By.id("back-to-products");
     private By ShoppingCartBadge = By.className("shopping_cart_badge");
 
-
     public CheckoutCompletePage(WebDriver driver) {
         this.driver = driver;
-
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
     }
 
-    public String getThankYouMessageText(){
-
+    public String getThankYouMessageText() {
         return driver.findElement(ThankYouMessageText).getText();
     }
-    public String getDispatchingMessageText(){
+
+    public String getDispatchingMessageText() {
         return driver.findElement(DispatchingMessageText).getText();
     }
 
-    public void  clickBackHomeButton(){
+    public void clickBackHomeButton() {
         driver.findElement(BackHomeButton).click();
     }
 
-    public boolean isShoppingCartBadgeEmpty(){
+    public boolean isShoppingCartBadgeEmpty() {
         return driver.findElements(ShoppingCartBadge).isEmpty();
     }
-
 }

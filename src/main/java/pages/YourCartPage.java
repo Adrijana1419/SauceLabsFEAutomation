@@ -18,21 +18,14 @@ public class YourCartPage {
     Actions actions;
     WebDriverWait wait;
 
-
     private By backpackRemoveButton = By.id("remove-sauce-labs-backpack");
-
-    private By continueButton = By.id("continue");
     private By yourCartTitle = By.className("title");
 
-
-
-    public YourCartPage(WebDriver driver){
-
+    public YourCartPage(WebDriver driver) {
         this.driver = driver;
         this.actions = new Actions(driver);
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-
 
     public String continueShoppingRedirectToProductPage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -51,7 +44,6 @@ public class YourCartPage {
         return driver.getCurrentUrl();
     }
 
-
     public String clickCheckoutAndRedirectToInformationPage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         By checkoutButton = By.id("checkout");
@@ -68,7 +60,6 @@ public class YourCartPage {
 
         return driver.getCurrentUrl();
     }
-
 
     public void removeBackpackFromCartIfPresent() {
         List<?> removeButtons = driver.findElements(backpackRemoveButton);
@@ -95,12 +86,11 @@ public class YourCartPage {
         By removeButton = By.id("remove-" + productId);
         return !driver.findElements(removeButton).isEmpty();
     }
+
     public int getCartItemsCountInList() {
 
         return driver.findElements(By.cssSelector("button[id^='remove-']")).size();
     }
-
-
 
     public List<CartItem> getCartItems() {
         List<WebElement> cartElements = driver.findElements(By.className("cart_item"));
@@ -156,7 +146,7 @@ public class YourCartPage {
         return driver.findElement(By.xpath("//div[@class='inventory_item_name' and text()='" + productName + "']"));
     }
 
-    public String yourCartTitleText(){
+    public String yourCartTitleText() {
 
         return driver.findElement(yourCartTitle).getText();
     }

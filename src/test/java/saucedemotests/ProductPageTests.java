@@ -36,7 +36,7 @@ public class ProductPageTests {
     }
 
     @Test
-    public void dropDownMenuOptionsTest(){
+    public void dropDownMenuOptionsTest() {
 
         assertEquals("Name (A to Z)", productsPage.getAllOptionsFromDropDownMenu().get(0).getText());
         assertEquals("Name (Z to A)", productsPage.getAllOptionsFromDropDownMenu().get(1).getText());
@@ -44,62 +44,51 @@ public class ProductPageTests {
         assertEquals("Price (high to low)", productsPage.getAllOptionsFromDropDownMenu().get(3).getText());
 
     }
+
     @Test
-    public void sortingProductsByTitleAtoZTest(){
-
+    public void sortingProductsByTitleAtoZTest() {
         List<String> initialTitlesList = productsPage.ProductsTitlesList();
-
         productsPage.selectDropDownMenuOption(1);
-
         List<String> TitleListReversedZtoA = productsPage.ProductsTitlesList();
 
-
         assertEquals(initialTitlesList.reversed(), TitleListReversedZtoA);
-
     }
+
     @Test
-    public void sortingProductsByTitleZtoATest(){
+    public void sortingProductsByTitleZtoATest() {
         productsPage.selectDropDownMenuOption(1);
 
-        assertEquals("Name (Z to A)",productsPage.getTextFromDropDownMenu());
-
+        assertEquals("Name (Z to A)", productsPage.getTextFromDropDownMenu());
     }
+
     @Test
-    public void sortingProductsByPriceLowToHighTest(){
+    public void sortingProductsByPriceLowToHighTest() {
         productsPage.selectDropDownMenuOption(2);
 
-        assertEquals("Price (low to high)",productsPage.getTextFromDropDownMenu());
+        assertEquals("Price (low to high)", productsPage.getTextFromDropDownMenu());
         assertTrue(productsPage.areProductsPricesSortedFromLowToHigh());
-
     }
+
     @Test
-    public void sortingProductsByPriceHighToLowTest(){
+    public void sortingProductsByPriceHighToLowTest() {
         productsPage.selectDropDownMenuOption(3);
 
-        assertEquals("Price (high to low)",productsPage.getTextFromDropDownMenu());
+        assertEquals("Price (high to low)", productsPage.getTextFromDropDownMenu());
         assertTrue(productsPage.areProductsPricesSortedFromHighToLow());
     }
 
     @Test
-    public void colorChangeHoverOnTitleTest() throws InterruptedException{
+    public void colorChangeHoverOnTitleTest() throws InterruptedException {
 
-        assertEquals("#18583a",productsPage.getColorFromBackPackTitle());
+        assertEquals("#18583a", productsPage.getColorFromBackPackTitle());
 
         productsPage.hoverBackPackTitle();
-
-
 
         assertEquals("#3ddc91", productsPage.getColorFromBackPackTitle());
     }
 
-
-
-
-
     @After
-    public void tearDown(){
-
-    driver.quit();
+    public void tearDown() {
+        driver.quit();
     }
-
 }

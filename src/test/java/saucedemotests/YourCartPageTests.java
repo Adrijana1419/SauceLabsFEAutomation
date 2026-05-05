@@ -26,8 +26,6 @@ public class YourCartPageTests {
     ProductsPage productsPage;
     WebDriverWait wait;
 
-
-
     @Before
     public void setUp() {
         driver = new ChromeDriver();
@@ -47,20 +45,17 @@ public class YourCartPageTests {
         productsPage = new ProductsPage(driver);
 
         productsPage.goToCart();
-
     }
-
 
     @Test
     public void continueShoppingRedirectsToProductsPageTest() {
         productsPage.addProductToCartIfNotAdded("sauce-labs-backpack");
         productsPage.goToCart();
-
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("continue-shopping")));
-
         String actualUrl = cartPage.continueShoppingRedirectToProductPage();
         String expectedUrl = "https://www.saucedemo.com/inventory.html";
+
         assertEquals("Clicking Continue Shopping should redirect to Products page", expectedUrl, actualUrl);
     }
 
@@ -68,15 +63,12 @@ public class YourCartPageTests {
     @Test
     public void checkoutRedirectsToYourInformationPageTest() {
         productsPage.addProductToCartIfNotAdded("sauce-labs-backpack");
-
         productsPage.goToCart();
-
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkout")));
-
         String actualUrl = cartPage.clickCheckoutAndRedirectToInformationPage();
-
         String expectedUrl = "https://www.saucedemo.com/checkout-step-one.html";
+
         assertEquals("Clicking Checkout should redirect to Checkout: Your Information page", expectedUrl, actualUrl);
     }
 
@@ -84,9 +76,7 @@ public class YourCartPageTests {
     @Test
     public void removeSingleProductFromCartTest() {
         productsPage.addBackpackToCartIfNotAdded();
-
         productsPage.goToCart();
-
         cartPage.removeBackpackFromCartIfPresent();
 
         assertFalse("Sauce Labs Backpack should be removed from the cart",
@@ -98,24 +88,19 @@ public class YourCartPageTests {
         productsPage.addProductToCartIfNotAdded("sauce-labs-backpack");
         productsPage.addProductToCartIfNotAdded("sauce-labs-bike-light");
         productsPage.addProductToCartIfNotAdded("sauce-labs-bolt-t-shirt");
-
         String badgeText = driver.findElement(By.className("shopping_cart_badge")).getText();
         System.out.println("Cart badge shows: " + badgeText);
 
         productsPage.goToCart();
-
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html"));
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("cart_item")));
-
         int initialCartCount = cartPage.getCartItemsCountInList();
         System.out.println("Initial cart count: " + initialCartCount);
 
         cartPage.removeProductFromCartIfPresent("sauce-labs-backpack");
         cartPage.removeProductFromCartIfPresent("sauce-labs-bike-light");
-
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("remove-sauce-labs-backpack")));
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("remove-sauce-labs-bike-light")));
-
         wait.until(driver -> cartPage.getCartItemsCountInList() == 1);
 
         assertFalse("Backpack should be removed", cartPage.isProductInCart("sauce-labs-backpack"));
@@ -123,6 +108,7 @@ public class YourCartPageTests {
         assertTrue("Bolt T-shirt should remain", cartPage.isProductInCart("sauce-labs-bolt-t-shirt"));
 
         int remainingCartCount = cartPage.getCartItemsCountInList();
+
         assertEquals("Cart count should decrement by 2", initialCartCount - 2, remainingCartCount);
     }
 
@@ -131,9 +117,7 @@ public class YourCartPageTests {
         productsPage.addProductToCartIfNotAdded("sauce-labs-backpack");
         productsPage.addProductToCartIfNotAdded("sauce-labs-bike-light");
         productsPage.addProductToCartIfNotAdded("sauce-labs-bolt-t-shirt");
-
         productsPage.goToCart();
-
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html"));
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("cart_item")));
 
@@ -145,7 +129,6 @@ public class YourCartPageTests {
             YourCartPage.CartItem item = cartItems.get(i);
             System.out.printf("%d. %s%n   Description: %s%n   Price: %s%n%n", i + 1, item.title, item.description, item.price);
         }
-
 
         assertEquals("Sauce Labs Backpack", cartItems.get(0).title);
         assertTrue(cartItems.get(0).description.contains("carry.allTheThings()"));
@@ -163,9 +146,7 @@ public class YourCartPageTests {
     @Test
     public void titleHoverAndClickRedirectsToProductDetailPageTest() {
         productsPage.addProductToCartIfNotAdded("sauce-labs-backpack");
-
         productsPage.goToCart();
-
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart_item")));
 
@@ -175,14 +156,10 @@ public class YourCartPageTests {
         assertNotNull("Title color should change after hover", hoverColor);
 
         String actualUrl = cartPage.clickProductTitle("Sauce Labs Backpack");
-
         String expectedUrl = "https://www.saucedemo.com/inventory-item.html?id=4";
+
         assertEquals("Clicking the title should open the Backpack detail page", expectedUrl, actualUrl);
     }
-
-
-
-
 
     @After
     public void tearDown() {

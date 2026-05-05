@@ -33,20 +33,21 @@ public class FooterTest {
         loginPage.clickLogin();
 
         footer = new Footer(driver);
-
-
     }
+
     @Test
     public void twitterFooterRedirectionTest() {
         String redirectedUrl = footer.verifyFooterRedirection(By.className("social_twitter"));
         System.out.println("Twitter redirected to: " + redirectedUrl);
-        assertTrue(redirectedUrl.contains("x.com/saucelabs") );
+
+        assertTrue(redirectedUrl.contains("x.com/saucelabs"));
     }
 
     @Test
     public void facebookFooterRedirectionTest() {
         String redirectedUrl = footer.verifyFooterRedirection(By.className("social_facebook"));
         System.out.println("Facebook redirected to: " + redirectedUrl);
+
         assertTrue(redirectedUrl.contains("facebook.com"));
     }
 
@@ -54,14 +55,12 @@ public class FooterTest {
     public void linkedInFooterRedirectionTest() {
         String redirectedUrl = footer.verifyFooterRedirection(By.className("social_linkedin"));
         System.out.println("LinkedIn redirected to: " + redirectedUrl);
+
         assertTrue(redirectedUrl.contains("linkedin.com"));
     }
 
-
     @After
-    public void tearDown(){
-
+    public void tearDown() {
         driver.quit();
     }
-
-    }
+}

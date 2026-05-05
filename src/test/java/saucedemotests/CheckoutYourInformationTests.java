@@ -22,12 +22,12 @@ import static org.junit.Assert.*;
 
 public class CheckoutYourInformationTests {
 
-        WebDriver driver;
-        WebDriverWait wait;
-        ProductsPage productsPage;
-        YourCartPage cartPage;
-        CheckoutYourInformationPage checkoutPage;
-        CheckoutOverviewPage checkoutOverviewPage;
+    WebDriver driver;
+    WebDriverWait wait;
+    ProductsPage productsPage;
+    YourCartPage cartPage;
+    CheckoutYourInformationPage checkoutPage;
+    CheckoutOverviewPage checkoutOverviewPage;
 
     @Before
     public void setUp() {
@@ -67,136 +67,123 @@ public class CheckoutYourInformationTests {
         checkoutPage = new CheckoutYourInformationPage(driver);
 
         checkoutOverviewPage = new CheckoutOverviewPage(driver);
+    }
+
+    @Test
+    public void clickCancelReturnToYourCartTest() throws InterruptedException {
+        Thread.sleep(5000);
+        checkoutPage.clickCancelButton();
+
+        assertEquals("Your Cart", cartPage.yourCartTitleText());
+    }
+
+    @Test
+    public void continueRedirectToCheckoutOverviewPageTest() throws InterruptedException {
+        checkoutPage.enterFirstName("test first name");
+        checkoutPage.enterLastName("test last name");
+        checkoutPage.enterPostalCode("1000");
+        checkoutPage.clickContinue();
+        Thread.sleep(5000);
+
+        assertEquals("Checkout: Overview", checkoutOverviewPage.getCheckoutOverviewTitleText());
 
     }
 
-
-   @Test
-   public void clickCancelReturnToYourCartTest() throws InterruptedException {
-
-       Thread.sleep(5000);
-
-       checkoutPage.clickCancelButton();
-       assertEquals("Your Cart", cartPage.yourCartTitleText());
-   }
-   @Test
-   public void continueRedirectToCheckoutOverviewPageTest() throws InterruptedException {
-
-       checkoutPage.enterFirstName("test first name");
+    @Test
+    public void missingFirstNameShowErrorTest() throws InterruptedException {
         checkoutPage.enterLastName("test last name");
         checkoutPage.enterPostalCode("1000");
         checkoutPage.clickContinue();
 
-       Thread.sleep(5000);
+        assertEquals("Error: First Name is required", checkoutPage.getErrorMessageText());
+    }
 
-       assertEquals("Checkout: Overview", checkoutOverviewPage.getCheckoutOverviewTitleText());
-
-   }
-
-   @Test
-   public void missingFirstNameShowErrorTest() throws InterruptedException {
-       checkoutPage.enterLastName("test last name");
-       checkoutPage.enterPostalCode("1000");
-       checkoutPage.clickContinue();
-
-       assertEquals("Error: First Name is required", checkoutPage.getErrorMessageText());
-   }
-
-   @Test
-   public void missingLastNameShowErrorTest() throws InterruptedException {
+    @Test
+    public void missingLastNameShowErrorTest() throws InterruptedException {
         checkoutPage.enterFirstName("test first name");
         checkoutPage.enterPostalCode("1000");
         checkoutPage.clickContinue();
 
         assertEquals("Error: Last Name is required", checkoutPage.getErrorMessageText());
-   }
+    }
 
-   @Test
-   public void missingPostalCodeShowErrorTest() throws InterruptedException {
+    @Test
+    public void missingPostalCodeShowErrorTest() throws InterruptedException {
         checkoutPage.enterFirstName("test first name");
         checkoutPage.enterLastName("test last name");
         checkoutPage.clickContinue();
 
         assertEquals("Error: Postal Code is required", checkoutPage.getErrorMessageText());
-   }
+    }
 
-   @Test
-   public void missingFirstNameAndLastNameShowErrorTest() throws InterruptedException {
+    @Test
+    public void missingFirstNameAndLastNameShowErrorTest() throws InterruptedException {
         checkoutPage.enterPostalCode("1000");
         checkoutPage.clickContinue();
+
         assertEquals("Error: First Name is required", checkoutPage.getErrorMessageText());
-   }
+    }
 
-   @Test
-   public void dismissErrorMessageRemovesWarningTest() throws InterruptedException {
-       checkoutPage.enterLastName("test last name");
-       checkoutPage.enterPostalCode("1000");
-       checkoutPage.clickContinue();
-       Thread.sleep(5000);
-       checkoutPage.clickErrorButton();
+    @Test
+    public void dismissErrorMessageRemovesWarningTest() throws InterruptedException {
+        checkoutPage.enterLastName("test last name");
+        checkoutPage.enterPostalCode("1000");
+        checkoutPage.clickContinue();
+        Thread.sleep(5000);
+        checkoutPage.clickErrorButton();
 
-       assertFalse(checkoutPage.isErrorMessageDisplayed());
-       
-   }
+        assertFalse(checkoutPage.isErrorMessageDisplayed());
+    }
 
-   @Test
-   public void browserRefreshRemovesInputsTest() throws InterruptedException {
-       checkoutPage.enterFirstName("test first name");
-       checkoutPage.enterLastName("test last name");
-       checkoutPage.enterPostalCode("1000");
+    @Test
+    public void browserRefreshRemovesInputsTest() throws InterruptedException {
+        checkoutPage.enterFirstName("test first name");
+        checkoutPage.enterLastName("test last name");
+        checkoutPage.enterPostalCode("1000");
+        driver.navigate().refresh();
+        Thread.sleep(5000);
 
-       driver.navigate().refresh();
-       Thread.sleep(5000);
+        assertTrue(checkoutPage.isFirstNameFieldEmpty());
+        assertTrue(checkoutPage.isLastNameFieldEmpty());
+        assertTrue(checkoutPage.isPostalCodeFieldEmpty());
+    }
 
-       assertTrue(checkoutPage.isFirstNameFieldEmpty());
-       assertTrue(checkoutPage.isLastNameFieldEmpty());
-       assertTrue(checkoutPage.isPostalCodeFieldEmpty());
-   }
+    @Test
+    public void clickOnRefreshButtonMakesErrorMessageDissapearsTest() throws InterruptedException {
+        checkoutPage.enterLastName("test last name");
+        checkoutPage.enterPostalCode("1000");
+        checkoutPage.clickContinue();
+        Thread.sleep(5000);
+        driver.navigate().refresh();
 
-   @Test
-   public void clickOnRefreshButtonMakesErrorMessageDissapearsTest() throws InterruptedException {
-       checkoutPage.enterLastName("test last name");
-       checkoutPage.enterPostalCode("1000");
-       checkoutPage.clickContinue();
-       Thread.sleep(5000);
+        assertFalse(checkoutPage.isErrorMessageDisplayed());
+    }
 
-       driver.navigate().refresh();
+    @Test
+    public void clickCancelAndBackToPageRemovesInputsTest() throws InterruptedException {
+        checkoutPage.enterFirstName("test first name");
+        checkoutPage.enterLastName("test last name");
+        checkoutPage.enterPostalCode("1000");
+        checkoutPage.clickCancelButton();
+        Thread.sleep(5000);
+        cartPage.clickCheckoutAndRedirectToInformationPage();
 
-       assertFalse(checkoutPage.isErrorMessageDisplayed());
+        assertTrue(checkoutPage.isFirstNameFieldEmpty());
+        assertTrue(checkoutPage.isLastNameFieldEmpty());
+        assertTrue(checkoutPage.isPostalCodeFieldEmpty());
+    }
 
-   }
-
-   @Test
-   public void clickCancelAndBackToPageRemovesInputsTest() throws InterruptedException {
-
-       checkoutPage.enterFirstName("test first name");
-       checkoutPage.enterLastName("test last name");
-       checkoutPage.enterPostalCode("1000");
-       checkoutPage.clickCancelButton();
-       Thread.sleep(5000);
-
-       cartPage.clickCheckoutAndRedirectToInformationPage();
-
-       assertTrue(checkoutPage.isFirstNameFieldEmpty());
-       assertTrue(checkoutPage.isLastNameFieldEmpty());
-       assertTrue(checkoutPage.isPostalCodeFieldEmpty());
-
-   }
-
-   @Test
-   public void clickCancelAndBackToPageRemovesErrorMessageTest() throws InterruptedException {
+    @Test
+    public void clickCancelAndBackToPageRemovesErrorMessageTest() throws InterruptedException {
         checkoutPage.clickContinue();
         checkoutPage.clickCancelButton();
         cartPage.clickCheckoutAndRedirectToInformationPage();
 
-       assertFalse(checkoutPage.isErrorMessageDisplayed());
-
-
-   }
+        assertFalse(checkoutPage.isErrorMessageDisplayed());
+    }
 
     @After
-        public void tearDown() {
+    public void tearDown() {
         driver.quit();
-        }
-
+    }
 }

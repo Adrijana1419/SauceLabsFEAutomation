@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -77,7 +78,6 @@ public class CheckoutOverviewTests {
         checkoutPage.clickContinue();
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/checkout-step-two.html"));
         checkoutOverviewPage = new CheckoutOverviewPage(driver);
-
     }
 
     @Test
@@ -85,13 +85,13 @@ public class CheckoutOverviewTests {
         checkoutOverviewPage.clickCancelButton();
         assertEquals("Products", productsPage.productsTextDisplayed());
         assertTrue(productsPage.isProductsTextDisplayed());
-
     }
 
     @Test
     public void clickFinishRedirectsToTheCheckoutCompletePageTest() {
         checkoutOverviewPage.clickFinishButton();
-        assertEquals("https://www.saucedemo.com/checkout-complete.html",driver.getCurrentUrl());
+
+        assertEquals("https://www.saucedemo.com/checkout-complete.html", driver.getCurrentUrl());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class CheckoutOverviewTests {
     @Test
     public void verifyProductsOnCheckoutOverviewPageTest() {
         List<CheckoutOverviewPage.OverviewPageItem> CheckoutOverviewPageItems = checkoutOverviewPage.getItems();
-        assertEquals(3,CheckoutOverviewPageItems.size());
+        assertEquals(3, CheckoutOverviewPageItems.size());
 
         for (int i = 0; i < CheckoutOverviewPageItems.size(); i++) {
             CheckoutOverviewPage.OverviewPageItem item = CheckoutOverviewPageItems.get(i);
@@ -126,10 +126,29 @@ public class CheckoutOverviewTests {
         assertEquals("$15.99", CheckoutOverviewPageItems.get(2).price);
     }
 
+    @Test
+    public void verifySummaryInformationOnCheckoutOverviewPageTest() {
+
+        CheckoutOverviewPage.SummaryInformation summary = checkoutOverviewPage.getSummaryInformation();
+
+        System.out.printf(
+                "Payment: %s%nShipping: %s%nSubtotal: %s%nTax: %s%nTotal: %s%n",
+                summary.payment,
+                summary.shipping,
+                summary.subtotal,
+                summary.tax,
+                summary.total
+        );
+
+        assertEquals("SauceCard #31337", summary.payment);
+        assertEquals("Free Pony Express Delivery!", summary.shipping);
+        assertEquals("Item total: $55.97", summary.subtotal);
+        assertEquals("Tax: $4.48", summary.tax);
+        assertEquals("Total: $60.45", summary.total);
+    }
+
     @After
     public void tearDown() {
         driver.quit();
     }
-
-
 }

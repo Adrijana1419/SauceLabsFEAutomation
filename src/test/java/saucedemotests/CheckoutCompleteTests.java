@@ -77,32 +77,29 @@ public class CheckoutCompleteTests {
         checkoutOverviewPage.clickFinishButton();
         wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/checkout-complete.html"));
         checkoutCompletePage = new CheckoutCompletePage(driver);
-
     }
 
     @Test
-    public void finalMessageVerificationTest() throws InterruptedException{
-        System.out.println("ThankYouMessage - " +checkoutCompletePage.getThankYouMessageText() + " " +
+    public void finalMessageVerificationTest() throws InterruptedException {
+        System.out.println("ThankYouMessage - " + checkoutCompletePage.getThankYouMessageText() + " " +
                 checkoutCompletePage.getDispatchingMessageText());
 
         assertEquals("Thank you for your order!", checkoutCompletePage.getThankYouMessageText());
-
         assertEquals("Your order has been dispatched, and will arrive just as fast as the pony can get there!",
                 checkoutCompletePage.getDispatchingMessageText());
-
     }
 
     @Test
-    public void clickingBackHomeButtonRedirectsToProductsPageTest() throws InterruptedException{
+    public void clickingBackHomeButtonRedirectsToProductsPageTest() throws InterruptedException {
         checkoutCompletePage.clickBackHomeButton();
         String expectedUrl = "https://www.saucedemo.com/inventory.html";
         String currentUrl = driver.getCurrentUrl();
 
         assertEquals(expectedUrl, currentUrl);
-
-        assertTrue(String.valueOf(true),checkoutCompletePage.isShoppingCartBadgeEmpty());
+        assertTrue(String.valueOf(true), checkoutCompletePage.isShoppingCartBadgeEmpty());
 
     }
+
     @After
     public void tearDown() {
         driver.quit();

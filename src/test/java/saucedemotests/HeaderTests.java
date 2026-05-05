@@ -21,8 +21,7 @@ public class HeaderTests {
     private LoginPage loginPage;
     private ProductsPage productsPage;
 
-    Header header ;
-
+    Header header;
 
     @Before
     public void setUp() throws InterruptedException {
@@ -38,61 +37,64 @@ public class HeaderTests {
         loginPage.clickLogin();
 
         header = new Header(driver);
-
     }
 
     @Test
-    public void yourCartIconTest()throws InterruptedException{
-
+    public void yourCartIconTest() throws InterruptedException {
         driver.findElement(By.className("shopping_cart_link")).click();
 
         String actualURL = driver.getCurrentUrl();
-
         System.out.println(actualURL);
-        assertEquals("https://www.saucedemo.com/cart.html",actualURL);
+
+        assertEquals("https://www.saucedemo.com/cart.html", actualURL);
     }
 
     @Test
-    public void openSidePanelMenuTest(){
+    public void openSidePanelMenuTest() {
         driver.findElement(id("react-burger-menu-btn")).click();
         WebElement sidePanelMenu = driver.findElement(By.className("bm-menu-wrap"));
         System.out.println(sidePanelMenu);
-        assertTrue("bm-menu-wrap",sidePanelMenu.isDisplayed());
+
+        assertTrue("bm-menu-wrap", sidePanelMenu.isDisplayed());
     }
+
     @Test
-    public void aboutLinkHrefTest(){
+    public void aboutLinkHrefTest() {
         String href = header.getAboutLinkHref();
 
         assertEquals("https://saucelabs.com/", href);
     }
-    @Test
-    public void clickAllItemsRedirectToProductPageTest(){
-        driver.findElement(By.className("shopping_cart_link")).click();
 
+    @Test
+    public void clickAllItemsRedirectToProductPageTest() {
+        driver.findElement(By.className("shopping_cart_link")).click();
         String currentUrl = header.clickAllItems();
 
         assertEquals("Clicking 'All Items' should redirect to the Products page.",
                 "https://www.saucedemo.com/inventory.html",
                 currentUrl);
     }
-    @Test
-    public void resetAppStateTest(){
-            driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
-            assertTrue(driver.findElement(By.className("shopping_cart_badge")).isDisplayed());
 
-            header.resetAppState();
-
-            assertTrue(driver.findElements(By.className("shopping_cart_badge")).isEmpty());
-        }
     @Test
-    public void logoutButtonTest(){
+    public void resetAppStateTest() {
+        driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
+
+        assertTrue(driver.findElement(By.className("shopping_cart_badge")).isDisplayed());
+
+        header.resetAppState();
+
+        assertTrue(driver.findElements(By.className("shopping_cart_badge")).isEmpty());
+    }
+
+    @Test
+    public void logoutButtonTest() {
         header.clickLogout();
 
         assertEquals("https://www.saucedemo.com/", driver.getCurrentUrl());
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
 
         driver.quit();
     }
